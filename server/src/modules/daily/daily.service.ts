@@ -11,23 +11,20 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { sanitizeRichHtml } from '../../common/utils/sanitize';
 import { toSlug } from '../../common/utils/slug';
 
-type DailyWritable = Omit<
-  Prisma.DailyVlogUncheckedCreateInput,
-  'userId' | 'slug'
->;
+type DailyWritable = Omit<Prisma.DailyVlogUncheckedCreateInput, 'userId'>;
 
 function mapDto(dto: CreateDailyDto | UpdateDailyDto): Partial<DailyWritable> {
   const data: Partial<DailyWritable> = {};
   if (dto.title !== undefined) data.title = dto.title;
   if (dto.content !== undefined)
-    data.content = dto.content as Prisma.InputJsonValue;
+    data.content = dto.content as unknown as Prisma.InputJsonValue;
   if (dto.contentHtml !== undefined)
     data.contentHtml = sanitizeRichHtml(dto.contentHtml);
   if (dto.coverUrl !== undefined) data.coverUrl = dto.coverUrl;
   if (dto.videos !== undefined)
-    data.videos = dto.videos as Prisma.InputJsonValue;
+    data.videos = dto.videos as unknown as Prisma.InputJsonValue;
   if (dto.images !== undefined)
-    data.images = dto.images as Prisma.InputJsonValue;
+    data.images = dto.images as unknown as Prisma.InputJsonValue;
   if (dto.tags !== undefined) data.tags = dto.tags;
   if (dto.publishedAt !== undefined)
     data.publishedAt = dto.publishedAt ? new Date(dto.publishedAt) : null;
@@ -73,7 +70,7 @@ export class DailyService {
       data: {
         ...(base as DailyWritable),
         title: dto.title,
-        content: (dto.content as Prisma.InputJsonValue) ?? {},
+        content: (dto.content as unknown as Prisma.InputJsonValue) ?? {},
         tags: dto.tags ?? [],
         userId,
         slug,

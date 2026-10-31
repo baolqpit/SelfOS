@@ -11,10 +11,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { sanitizeRichHtml } from '../../common/utils/sanitize';
 import { toSlug } from '../../common/utils/slug';
 
-type KnowledgeWritable = Omit<
-  Prisma.KnowledgeUncheckedCreateInput,
-  'userId' | 'slug'
->;
+type KnowledgeWritable = Omit<Prisma.KnowledgeUncheckedCreateInput, 'userId'>;
 
 function mapDto(
   dto: CreateKnowledgeDto | UpdateKnowledgeDto,
@@ -22,7 +19,7 @@ function mapDto(
   const data: Partial<KnowledgeWritable> = {};
   if (dto.title !== undefined) data.title = dto.title;
   if (dto.content !== undefined)
-    data.content = dto.content as Prisma.InputJsonValue;
+    data.content = dto.content as unknown as Prisma.InputJsonValue;
   if (dto.contentHtml !== undefined)
     data.contentHtml = sanitizeRichHtml(dto.contentHtml);
   if (dto.method !== undefined) data.method = dto.method;
@@ -36,7 +33,7 @@ function mapDto(
   if (dto.certificatePublicId !== undefined)
     data.certificatePublicId = dto.certificatePublicId;
   if (dto.images !== undefined)
-    data.images = dto.images as Prisma.InputJsonValue;
+    data.images = dto.images as unknown as Prisma.InputJsonValue;
   if (dto.tags !== undefined) data.tags = dto.tags;
   if (dto.isPublished !== undefined) data.isPublished = dto.isPublished;
   return data;
@@ -77,7 +74,7 @@ export class KnowledgeService {
       data: {
         ...(base as KnowledgeWritable),
         title: dto.title,
-        content: (dto.content as Prisma.InputJsonValue) ?? {},
+        content: (dto.content as unknown as Prisma.InputJsonValue) ?? {},
         tags: dto.tags ?? [],
         userId,
         slug,

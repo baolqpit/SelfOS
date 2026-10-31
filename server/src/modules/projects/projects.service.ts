@@ -11,10 +11,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { sanitizeRichHtml } from '../../common/utils/sanitize';
 import { toSlug } from '../../common/utils/slug';
 
-type ProjectWritable = Omit<
-  Prisma.ProjectUncheckedCreateInput,
-  'userId' | 'slug'
->;
+type ProjectWritable = Omit<Prisma.ProjectUncheckedCreateInput, 'userId'>;
 
 function mapDto(
   dto: CreateProjectDto | UpdateProjectDto,
@@ -22,7 +19,8 @@ function mapDto(
   const data: Partial<ProjectWritable> = {};
   if (dto.name !== undefined) data.name = dto.name;
   if (dto.summary !== undefined) data.summary = dto.summary;
-  if (dto.content !== undefined) data.content = dto.content as Prisma.InputJsonValue;
+  if (dto.content !== undefined)
+    data.content = dto.content as unknown as Prisma.InputJsonValue;
   if (dto.contentHtml !== undefined)
     data.contentHtml = sanitizeRichHtml(dto.contentHtml);
   if (dto.coverUrl !== undefined) data.coverUrl = dto.coverUrl;
@@ -40,9 +38,10 @@ function mapDto(
   }
   if (dto.client !== undefined) data.client = dto.client;
   if (dto.role !== undefined) data.role = dto.role;
-  if (dto.links !== undefined) data.links = dto.links as Prisma.InputJsonValue;
+  if (dto.links !== undefined)
+    data.links = dto.links as unknown as Prisma.InputJsonValue;
   if (dto.gallery !== undefined)
-    data.gallery = dto.gallery as Prisma.InputJsonValue;
+    data.gallery = dto.gallery as unknown as Prisma.InputJsonValue;
   if (dto.isPublished !== undefined) {
     data.isPublished = dto.isPublished;
     data.publishedAt = dto.isPublished ? new Date() : null;
@@ -88,7 +87,7 @@ export class ProjectsService {
       data: {
         ...(base as ProjectWritable),
         name: dto.name,
-        content: (dto.content as Prisma.InputJsonValue) ?? {},
+        content: (dto.content as unknown as Prisma.InputJsonValue) ?? {},
         technologies: dto.technologies ?? [],
         userId,
         slug,
