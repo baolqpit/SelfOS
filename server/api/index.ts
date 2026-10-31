@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 import type { IncomingMessage, ServerResponse } from 'http';
@@ -36,6 +37,17 @@ async function bootstrap(): Promise<Express> {
   );
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  if (process.env.SWAGGER_ENABLED !== 'false') {
+    const swagger = new DocumentBuilder()
+      .setTitle('selfOS API')
+      .setDescription('Personal portfolio multi-tenant API')
+      .setVersion('0.1.0')
+      .addBearerAuth()
+      .build();
+    const doc = SwaggerModule.createDocument(app, swagger);
+    SwaggerModule.setup('docs', app, doc);
+  }
 
   await app.init();
   cached = expressApp;
