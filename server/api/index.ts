@@ -46,7 +46,15 @@ async function bootstrap(): Promise<Express> {
       .addBearerAuth()
       .build();
     const doc = SwaggerModule.createDocument(app, swagger);
-    SwaggerModule.setup('docs', app, doc);
+    SwaggerModule.setup('docs', app, doc, {
+      customCssUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css',
+      customJs: [
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-bundle.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-standalone-preset.min.js',
+      ],
+      swaggerOptions: { persistAuthorization: true },
+    });
   }
 
   await app.init();
