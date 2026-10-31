@@ -11,6 +11,35 @@ import { AppModule } from '../src/app.module';
 import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
 import { TransformInterceptor } from '../src/common/interceptors/transform.interceptor';
 
+const SWAGGER_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14';
+const SWAGGER_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>selfOS API — Swagger UI</title>
+  <link rel="stylesheet" href="${SWAGGER_CDN}/swagger-ui.min.css" />
+  <style>body{margin:0;background:#fafafa;}</style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="${SWAGGER_CDN}/swagger-ui-bundle.min.js" crossorigin></script>
+  <script src="${SWAGGER_CDN}/swagger-ui-standalone-preset.min.js" crossorigin></script>
+  <script>
+    window.addEventListener('load', function () {
+      window.ui = SwaggerUIBundle({
+        url: '/docs-json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        persistAuthorization: true,
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+        layout: 'StandaloneLayout',
+      });
+    });
+  </script>
+</body>
+</html>`;
+
 let cached: Express | null = null;
 
 async function bootstrap(): Promise<Express> {
@@ -69,14 +98,12 @@ async function bootstrap(): Promise<Express> {
       .addBearerAuth()
       .build();
     const doc = SwaggerModule.createDocument(app, swagger);
-    SwaggerModule.setup('docs', app, doc, {
-      customCssUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css',
-      customJs: [
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-bundle.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-standalone-preset.min.js',
-      ],
-      swaggerOptions: { persistAuthorization: true },
+
+    // Serve spec + custom HTML (CDN-only, no local assets)
+    // – more reliable on serverless than swagger-ui-express static files.
+    expressApp.get('/docs-json', (_req, res) => res.json(doc));
+    expressApp.get('/docs', (_req, res) => {
+      res.set('Content-Type', 'text/html; charset=utf-8').send(SWAGGER_HTML);
     });
   }
 

@@ -5,7 +5,14 @@
     {
       "src": "api/index.ts",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**", "node_modules/.prisma/**", "node_modules/@prisma/**"] }
+      "config": {
+        "includeFiles": [
+          "dist/**",
+          "node_modules/.prisma/**",
+          "node_modules/@prisma/**",
+          "node_modules/swagger-ui-dist/**"
+        ]
+      }
     }
   ],
   "routes": [{ "src": "/(.*)", "dest": "api/index.ts" }]
