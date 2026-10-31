@@ -22,7 +22,30 @@ async function bootstrap(): Promise<Express> {
   });
 
   app.setGlobalPrefix('api/v1');
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://cdnjs.cloudflare.com',
+          ],
+          styleSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://cdnjs.cloudflare.com',
+          ],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'", 'https:', 'data:'],
+          workerSrc: ["'self'", 'blob:'],
+        },
+      },
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
   app.enableCors({
     origin: [process.env.WEB_ORIGIN ?? 'http://localhost:3000', /\.vercel\.app$/],
     credentials: true,
