@@ -59,21 +59,38 @@ export default function RegisterPage() {
           Dùng username làm URL public của bạn: <code>/u/username</code>
         </CardDescription>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-          <Field label="Email" error={errors.email?.message}>
-            <Input type="email" autoComplete="email" {...register('email')} />
+          <Field
+            label="Email"
+            hint="Dùng để đăng nhập và nhận thông báo. Không hiển thị public."
+            error={errors.email?.message}
+          >
+            <Input type="email" placeholder="you@example.com" autoComplete="email" {...register('email')} />
           </Field>
-          <Field label="Username" error={errors.username?.message}>
-            <Input autoComplete="username" {...register('username')} />
+          <Field
+            label="Username"
+            hint="3–32 ký tự, chỉ chữ/số/dấu gạch. Đây sẽ là URL public /u/username."
+            error={errors.username?.message}
+          >
+            <Input placeholder="VD: alice (không khoảng trắng)" autoComplete="username" {...register('username')} />
           </Field>
-          <Field label="Mật khẩu" error={errors.password?.message}>
+          <Field
+            label="Mật khẩu"
+            hint="Tối thiểu 8 ký tự. Nên kết hợp chữ + số + ký tự đặc biệt."
+            error={errors.password?.message}
+          >
             <Input
               type="password"
+              placeholder="••••••••"
               autoComplete="new-password"
               {...register('password')}
             />
           </Field>
-          <Field label="Xác nhận mật khẩu" error={errors.confirm?.message}>
-            <Input type="password" {...register('confirm')} />
+          <Field
+            label="Xác nhận mật khẩu"
+            hint="Nhập lại mật khẩu để tránh gõ sai."
+            error={errors.confirm?.message}
+          >
+            <Input type="password" placeholder="••••••••" {...register('confirm')} />
           </Field>
           {serverError && (
             <p className="text-sm text-[var(--color-destructive)]">{serverError}</p>

@@ -74,33 +74,75 @@ export function ProfileForm({ initial }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Card className="flex flex-col gap-4">
         <CardTitle>Thông tin cá nhân</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Đây là thông tin hiển thị trên trang public <code>/u/username</code>.
+          Có thể bật/tắt từng mục ở trang <strong>Settings</strong>.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Họ và tên" error={errors.fullName?.message}>
-            <Input {...register('fullName')} />
+          <Field
+            label="Họ và tên"
+            hint="Hiển thị dưới dạng tiêu đề lớn ở trang profile."
+            error={errors.fullName?.message}
+          >
+            <Input placeholder="VD: Nguyễn Văn A" {...register('fullName')} />
           </Field>
-          <Field label="Email hiển thị" error={errors.email?.message}>
-            <Input type="email" {...register('email')} />
+          <Field
+            label="Email hiển thị"
+            hint="Email public cho khách truy cập liên hệ — có thể khác email đăng nhập."
+            error={errors.email?.message}
+          >
+            <Input type="email" placeholder="you@example.com" {...register('email')} />
           </Field>
-          <Field label="Ngày sinh" error={errors.dateOfBirth?.message}>
+          <Field
+            label="Ngày sinh"
+            hint="Mặc định ẩn khỏi public, chỉ hiện khi bạn bật ở Settings."
+            error={errors.dateOfBirth?.message}
+          >
             <Input type="date" {...register('dateOfBirth')} />
           </Field>
-          <Field label="Số điện thoại" error={errors.phone?.message}>
-            <Input {...register('phone')} />
+          <Field
+            label="Số điện thoại"
+            hint="Để trống nếu không muốn public. Có thể kèm mã vùng."
+            error={errors.phone?.message}
+          >
+            <Input placeholder="+84 912 345 678" {...register('phone')} />
           </Field>
-          <Field label="Địa chỉ" error={errors.address?.message} className="md:col-span-2">
-            <Input {...register('address')} />
+          <Field
+            label="Địa chỉ"
+            hint="Thành phố/quốc gia là đủ — không cần địa chỉ chi tiết."
+            error={errors.address?.message}
+            className="md:col-span-2"
+          >
+            <Input placeholder="TP. Hồ Chí Minh, Việt Nam" {...register('address')} />
           </Field>
-          <Field label="Nghề nghiệp" error={errors.occupation?.message} className="md:col-span-2">
-            <Input {...register('occupation')} />
+          <Field
+            label="Nghề nghiệp"
+            hint="Chức danh/vai trò chính — hiện ngay dưới tên."
+            error={errors.occupation?.message}
+            className="md:col-span-2"
+          >
+            <Input placeholder="VD: Senior Full-stack Engineer @ Startup XYZ" {...register('occupation')} />
           </Field>
-          <Field label="Bio ngắn" error={errors.bio?.message} className="md:col-span-2">
-            <Textarea rows={3} {...register('bio')} />
+          <Field
+            label="Bio ngắn"
+            hint="1–3 câu giới thiệu bản thân (tối đa 500 ký tự)."
+            error={errors.bio?.message}
+            className="md:col-span-2"
+          >
+            <Textarea
+              rows={3}
+              placeholder="VD: Yêu TypeScript, cà phê đen, và những buổi code đêm. Hiện đang làm việc tại..."
+              {...register('bio')}
+            />
           </Field>
         </div>
       </Card>
 
       <Card className="flex flex-col gap-4">
         <CardTitle>Avatar & Cover</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Hỗ trợ JPG/PNG/WebP. Khuyến nghị: avatar vuông 400×400, cover 1600×500. File &gt;5MB sẽ được Cloudinary tự tối ưu.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <p className="mb-2 text-sm font-medium">Avatar</p>
@@ -135,13 +177,25 @@ export function ProfileForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-4">
         <CardTitle>Social links</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Dán URL đầy đủ (bắt đầu bằng <code>https://</code>). Để trống nếu không muốn hiển thị.
+        </p>
         <div className="grid gap-3 md:grid-cols-2">
-          {['github', 'linkedin', 'facebook', 'x', 'youtube', 'website'].map((key) => (
-            <Field key={key} label={key}>
+          {(
+            [
+              { key: 'github', placeholder: 'https://github.com/username' },
+              { key: 'linkedin', placeholder: 'https://linkedin.com/in/username' },
+              { key: 'facebook', placeholder: 'https://facebook.com/username' },
+              { key: 'x', placeholder: 'https://x.com/username' },
+              { key: 'youtube', placeholder: 'https://youtube.com/@channel' },
+              { key: 'website', placeholder: 'https://your-site.com' },
+            ] as const
+          ).map(({ key, placeholder }) => (
+            <Field key={key} label={key[0].toUpperCase() + key.slice(1)}>
               <Input
                 defaultValue={(socialLinks as Record<string, string>)[key] ?? ''}
                 onChange={(e) => setSocial(key, e.target.value)}
-                placeholder={`https://${key}.com/username`}
+                placeholder={placeholder}
               />
             </Field>
           ))}

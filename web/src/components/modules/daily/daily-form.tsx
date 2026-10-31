@@ -77,14 +77,30 @@ export function DailyForm({ initial }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Card className="flex flex-col gap-4">
         <CardTitle>Thông tin</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Vlog ngắn gọn mỗi ngày — chia sẻ trải nghiệm, suy nghĩ, hành trình học hỏi.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Tiêu đề" error={errors.title?.message} className="md:col-span-2">
-            <Input {...register('title')} />
+          <Field
+            label="Tiêu đề *"
+            hint="Tối đa 200 ký tự. Nên có mốc thời gian/chủ đề để dễ tra lại."
+            error={errors.title?.message}
+            className="md:col-span-2"
+          >
+            <Input placeholder="VD: Ngày 15 — Thử pour-over V60 với hạt Ethiopia" {...register('title')} />
           </Field>
-          <Field label="Slug (tùy chọn)" error={errors.slug?.message}>
-            <Input {...register('slug')} />
+          <Field
+            label="Slug"
+            hint="URL public /daily/slug. Bỏ trống → tự sinh từ tiêu đề."
+            error={errors.slug?.message}
+          >
+            <Input placeholder="ngay-15-pour-over-v60" {...register('slug')} />
           </Field>
-          <Field label="Ngày đăng" error={errors.publishedAt?.message}>
+          <Field
+            label="Ngày đăng"
+            hint="Bỏ trống → dùng thời gian bật Published."
+            error={errors.publishedAt?.message}
+          >
             <Input type="date" {...register('publishedAt')} />
           </Field>
         </div>
@@ -92,11 +108,17 @@ export function DailyForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Tags</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Phân loại chủ đề (coffee, travel, work…). Nhấn <kbd>Enter</kbd> hoặc dấu phẩy để thêm.
+        </p>
         <TagInput value={tags ?? []} onChange={(v) => setValue('tags', v, { shouldDirty: true })} />
       </Card>
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Ảnh đại diện</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Hiện ở đầu bài viết và card trong list. Khuyến nghị 16:9.
+        </p>
         <CloudinaryUploader
           multiple={false}
           folder="daily/cover"
@@ -107,6 +129,9 @@ export function DailyForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Videos</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          File MP4/MOV/WebM. Có thể upload nhiều clip; Cloudinary tự tạo thumbnail.
+        </p>
         <CloudinaryUploader
           folder="daily/videos"
           resourceType="video"
@@ -118,6 +143,9 @@ export function DailyForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Ảnh phụ</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Ảnh minh họa thêm. Hiển thị dạng grid dưới nội dung.
+        </p>
         <CloudinaryUploader
           folder="daily/images"
           resourceType="image"
@@ -128,9 +156,12 @@ export function DailyForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Nội dung</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Viết tự do như blog. Dùng toolbar để chèn ảnh/video/embed. Phím tắt: <kbd>Ctrl+B</kbd> bold, <kbd>Ctrl+I</kbd> italic.
+        </p>
         <TiptapEditor
           folder="daily/content"
-          placeholder="Hôm nay bạn làm gì?"
+          placeholder="Hôm nay bạn làm gì? Có gì đáng nhớ..."
           value={content as never}
           onChange={(json, html) => {
             setValue('content', json as Record<string, unknown>, { shouldDirty: true });
@@ -142,6 +173,9 @@ export function DailyForm({ initial }: Props) {
       <Card className="flex items-center justify-between">
         <div>
           <CardTitle>Published</CardTitle>
+          <p className="text-sm text-[var(--color-muted-foreground)]">
+            Khi bật, bài viết công khai tại <code>/u/username/daily/slug</code>.
+          </p>
         </div>
         <Switch checked={!!isPublished} onChange={(v) => setValue('isPublished', v, { shouldDirty: true })} />
       </Card>

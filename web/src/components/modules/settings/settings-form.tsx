@@ -62,8 +62,11 @@ export function SettingsForm({ initial }: Props) {
     <div className="flex flex-col gap-5">
       <Card className="flex flex-col gap-3">
         <CardTitle>Giao diện</CardTitle>
+        <CardDescription>
+          Áp dụng cho trang public <code>/u/username</code>. Thay đổi mất ~1 phút để cập nhật (ISR cache).
+        </CardDescription>
         <div className="grid gap-3 md:grid-cols-3">
-          <Field label="Theme">
+          <Field label="Theme" hint="System sẽ theo cài đặt máy khách truy cập.">
             <select
               className="h-10 rounded-md border border-[var(--color-border)] bg-transparent px-2 text-sm"
               value={state.theme}
@@ -74,7 +77,7 @@ export function SettingsForm({ initial }: Props) {
               <option value="dark">Dark</option>
             </select>
           </Field>
-          <Field label="Layout">
+          <Field label="Layout" hint="Cách sắp xếp list projects/daily/knowledge.">
             <select
               className="h-10 rounded-md border border-[var(--color-border)] bg-transparent px-2 text-sm"
               value={state.layout}
@@ -82,12 +85,12 @@ export function SettingsForm({ initial }: Props) {
                 setState({ ...state, layout: e.target.value as DisplaySettings['layout'] })
               }
             >
-              <option value="grid">Grid</option>
-              <option value="list">List</option>
-              <option value="magazine">Magazine</option>
+              <option value="grid">Grid — card lưới</option>
+              <option value="list">List — danh sách dọc</option>
+              <option value="magazine">Magazine — item lớn + nhỏ xen kẽ</option>
             </select>
           </Field>
-          <Field label="Accent color">
+          <Field label="Accent color" hint="Màu nhấn cho button, link, highlight.">
             <Input
               type="color"
               value={state.accentColor ?? '#6366f1'}
@@ -99,7 +102,9 @@ export function SettingsForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Hiển thị modules</CardTitle>
-        <CardDescription>Chọn module nào + field nào hiện ra trang public.</CardDescription>
+        <CardDescription>
+          Chọn module nào + field nào hiện ra trang public. Tắt một field → vẫn lưu trong DB nhưng khách truy cập không thấy.
+        </CardDescription>
 
         <div className="flex items-center justify-between py-2">
           <div>

@@ -3,7 +3,7 @@
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import { Field } from '@/components/ui/field';
 import { loginSchema, type LoginInput } from '@/lib/validators/auth';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const sp = useSearchParams();
   const next = sp.get('next') ?? '/dashboard';
@@ -48,13 +48,23 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <Field
             label="Email hoặc username"
+            hint="Dùng email đã đăng ký, hoặc username (VD: alice)."
             error={errors.emailOrUsername?.message}
           >
-            <Input {...register('emailOrUsername')} autoComplete="username" />
+            <Input
+              placeholder="you@example.com hoặc username"
+              {...register('emailOrUsername')}
+              autoComplete="username"
+            />
           </Field>
-          <Field label="Mật khẩu" error={errors.password?.message}>
+          <Field
+            label="Mật khẩu"
+            hint="Tối thiểu 8 ký tự."
+            error={errors.password?.message}
+          >
             <Input
               type="password"
+              placeholder="••••••••"
               {...register('password')}
               autoComplete="current-password"
             />
@@ -74,5 +84,13 @@ export default function LoginPage() {
         </form>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

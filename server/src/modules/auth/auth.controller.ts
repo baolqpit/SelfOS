@@ -7,7 +7,7 @@ import {
   UseGuards,
   Get,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -26,6 +26,22 @@ export class AuthController {
 
   @Public()
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Đăng ký tài khoản mới' })
+  @ApiOkResponse({
+    description: 'Trả về user vừa tạo + cặp access/refresh token.',
+    schema: {
+      example: {
+        user: {
+          id: 'clz1a2b3c4d5e6f7g8h9',
+          email: 'alice@example.com',
+          username: 'alice',
+          createdAt: '2024-10-15T08:30:00.000Z',
+        },
+        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<sig>',
+        refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<sig>',
+      },
+    },
+  })
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.auth.register(dto.email, dto.username, dto.password);
@@ -34,6 +50,21 @@ export class AuthController {
   @Public()
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Đăng nhập bằng email/username + password' })
+  @ApiOkResponse({
+    schema: {
+      example: {
+        user: {
+          id: 'clz1a2b3c4d5e6f7g8h9',
+          email: 'alice@example.com',
+          username: 'alice',
+          createdAt: '2024-10-15T08:30:00.000Z',
+        },
+        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<sig>',
+        refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<sig>',
+      },
+    },
+  })
   @Post('login')
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto.emailOrUsername, dto.password);

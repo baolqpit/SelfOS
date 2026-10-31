@@ -91,50 +91,114 @@ export function ProjectForm({ initial }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Card className="flex flex-col gap-4">
         <CardTitle>Thông tin</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Những trường bắt buộc được đánh dấu đỏ nếu bỏ trống. Mục doanh thu & khách hàng có thể ẩn khỏi public ở trang <strong>Settings</strong>.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Tên dự án" error={errors.name?.message} className="md:col-span-2">
-            <Input {...register('name')} />
+          <Field
+            label="Tên dự án *"
+            hint="Rõ ràng, dễ nhớ. Tối đa 160 ký tự."
+            error={errors.name?.message}
+            className="md:col-span-2"
+          >
+            <Input placeholder="VD: Taskly — Realtime team planner" {...register('name')} />
           </Field>
-          <Field label="Slug (để trống sẽ tự tạo)" error={errors.slug?.message}>
-            <Input {...register('slug')} />
+          <Field
+            label="Slug"
+            hint="URL public dạng /projects/slug. Bỏ trống → tự sinh từ tên."
+            error={errors.slug?.message}
+          >
+            <Input placeholder="taskly-realtime-planner" {...register('slug')} />
           </Field>
-          <Field label="Khách hàng" error={errors.client?.message}>
-            <Input {...register('client')} />
+          <Field
+            label="Khách hàng"
+            hint="Tên công ty/khách; để trống nếu dự án cá nhân."
+            error={errors.client?.message}
+          >
+            <Input placeholder="VD: Startup XYZ / Nội bộ" {...register('client')} />
           </Field>
-          <Field label="Vai trò" error={errors.role?.message}>
-            <Input {...register('role')} />
+          <Field
+            label="Vai trò"
+            hint="Bạn phụ trách gì trong dự án?"
+            error={errors.role?.message}
+          >
+            <Input placeholder="VD: Tech Lead / Backend Dev" {...register('role')} />
           </Field>
-          <Field label="Số người tham gia" error={errors.teamSize?.message}>
-            <Input type="number" min={1} {...register('teamSize')} />
+          <Field
+            label="Số người tham gia"
+            hint="Bao gồm chính bạn."
+            error={errors.teamSize?.message}
+          >
+            <Input type="number" min={1} placeholder="VD: 4" {...register('teamSize')} />
           </Field>
-          <Field label="Bắt đầu" error={errors.startDate?.message}>
+          <Field
+            label="Bắt đầu"
+            hint="Ngày bắt đầu tham gia dự án."
+            error={errors.startDate?.message}
+          >
             <Input type="date" {...register('startDate')} />
           </Field>
-          <Field label="Kết thúc" error={errors.endDate?.message}>
+          <Field
+            label="Kết thúc"
+            hint="Để trống nếu dự án vẫn đang tiến hành."
+            error={errors.endDate?.message}
+          >
             <Input type="date" {...register('endDate')} />
           </Field>
-          <Field label="Tóm tắt (hiển thị card)" className="md:col-span-2" error={errors.summary?.message}>
-            <Textarea rows={2} {...register('summary')} />
+          <Field
+            label="Tóm tắt (hiển thị card)"
+            hint="1–2 câu mô tả — hiển thị ở list projects. Tối đa 500 ký tự."
+            className="md:col-span-2"
+            error={errors.summary?.message}
+          >
+            <Textarea
+              rows={2}
+              placeholder="VD: SaaS quản lý task cho startup, realtime sync qua WebSocket..."
+              {...register('summary')}
+            />
           </Field>
-          <Field label="Kết quả đạt được" className="md:col-span-2" error={errors.results?.message}>
-            <Textarea rows={2} {...register('results')} />
+          <Field
+            label="Kết quả đạt được"
+            hint="Số liệu cụ thể càng tốt (giảm X%, Y người dùng...)."
+            className="md:col-span-2"
+            error={errors.results?.message}
+          >
+            <Textarea
+              rows={2}
+              placeholder="VD: Giảm 40% thời gian lên sprint, 500+ user active tháng đầu."
+              {...register('results')}
+            />
           </Field>
-          <Field label="Doanh thu — Số tiền" error={errors.revenue?.amount?.message}>
-            <Input type="number" min={0} step={1000} {...register('revenue.amount')} />
+          <Field
+            label="Doanh thu — Số tiền"
+            hint="Giá trị dự án (có thể ẩn khỏi public ở Settings)."
+            error={errors.revenue?.amount?.message}
+          >
+            <Input type="number" min={0} step={1000} placeholder="120000000" {...register('revenue.amount')} />
           </Field>
-          <Field label="Doanh thu — Đơn vị" error={errors.revenue?.currency?.message}>
-            <Input placeholder="VND / USD" {...register('revenue.currency')} />
+          <Field
+            label="Doanh thu — Đơn vị"
+            hint="Mã tiền tệ ISO (VND, USD, EUR...)."
+            error={errors.revenue?.currency?.message}
+          >
+            <Input placeholder="VND" {...register('revenue.currency')} />
           </Field>
         </div>
       </Card>
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Công nghệ / Công cụ</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Gõ tên công nghệ rồi nhấn <kbd>Enter</kbd> hoặc dấu phẩy để thêm tag. Tối đa 50 tag.
+        </p>
         <TagInput value={technologies ?? []} onChange={(v) => setValue('technologies', v, { shouldDirty: true })} />
       </Card>
 
       <Card className="flex flex-col gap-3">
-        <CardTitle>Ảnh đại diện</CardTitle>
+        <CardTitle>Ảnh đại diện (cover)</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Hiển thị ở đầu trang chi tiết + card list. Khuyến nghị 1600×900 (tỷ lệ 16:9). JPG/PNG/WebP.
+        </p>
         <CloudinaryUploader
           multiple={false}
           folder="projects/cover"
@@ -149,6 +213,9 @@ export function ProjectForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Thư viện ảnh/video phụ</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Hiển thị dạng grid ở cuối trang chi tiết. Kéo-thả nhiều file; hỗ trợ ảnh &amp; video.
+        </p>
         <CloudinaryUploader
           folder="projects/gallery"
           resourceType="auto"
@@ -160,9 +227,12 @@ export function ProjectForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Chi tiết</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Trình soạn thảo rich-text: định dạng chữ (<strong>Ctrl+B</strong>, <em>Ctrl+I</em>), chèn heading/list/link, nhúng ảnh &amp; video YouTube/Vimeo bằng nút trên toolbar.
+        </p>
         <TiptapEditor
           folder="projects/content"
-          placeholder="Mô tả chi tiết dự án…"
+          placeholder="Mô tả chi tiết dự án: bối cảnh, vấn đề, giải pháp, kiến trúc..."
           value={content as never}
           onChange={(json, html) => {
             setValue('content', json as Record<string, unknown>, { shouldDirty: true });

@@ -80,35 +80,69 @@ export function KnowledgeForm({ initial }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Card className="flex flex-col gap-4">
         <CardTitle>Thông tin</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Ghi lại chủ đề đã học, phương pháp tiếp cận và thành quả — để sau này tra cứu & chia sẻ.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Tên kiến thức" error={errors.title?.message} className="md:col-span-2">
-            <Input {...register('title')} />
+          <Field
+            label="Tên kiến thức *"
+            hint="Tên chủ đề/khóa học/kỹ năng. Tối đa 200 ký tự."
+            error={errors.title?.message}
+            className="md:col-span-2"
+          >
+            <Input placeholder="VD: React 19 Server Actions" {...register('title')} />
           </Field>
-          <Field label="Slug (tùy chọn)">
-            <Input {...register('slug')} />
+          <Field
+            label="Slug"
+            hint="Bỏ trống → tự sinh từ tiêu đề."
+          >
+            <Input placeholder="react-19-server-actions" {...register('slug')} />
           </Field>
-          <Field label="Nguồn / khóa học">
-            <Input {...register('source')} />
+          <Field
+            label="Nguồn / khóa học"
+            hint="URL khóa học hoặc tài liệu gốc."
+          >
+            <Input placeholder="VD: https://react.dev / Udemy / sách..." {...register('source')} />
           </Field>
-          <Field label="Bắt đầu học">
+          <Field
+            label="Bắt đầu học"
+            hint="Ngày bắt đầu tìm hiểu chủ đề này."
+          >
             <Input type="date" {...register('startedAt')} />
           </Field>
-          <Field label="Hoàn thành">
+          <Field
+            label="Hoàn thành"
+            hint="Để trống nếu vẫn đang học."
+          >
             <Input type="date" {...register('completedAt')} />
           </Field>
-          <Field label="Phương pháp học" className="md:col-span-2">
-            <Textarea rows={2} {...register('method')} />
+          <Field
+            label="Phương pháp học"
+            hint="Cách tiếp cận: đọc docs → làm demo → viết lại; Feynman; pomodoro…"
+            className="md:col-span-2"
+          >
+            <Textarea
+              rows={2}
+              placeholder="VD: Đọc docs → clone example → viết blog tóm tắt lại bằng tiếng Việt."
+              {...register('method')}
+            />
           </Field>
         </div>
       </Card>
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Tags</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Chủ đề/lĩnh vực liên quan (react, backend, docker…). Nhấn <kbd>Enter</kbd> để thêm.
+        </p>
         <TagInput value={tags ?? []} onChange={(v) => setValue('tags', v, { shouldDirty: true })} />
       </Card>
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Chứng chỉ (ảnh/PDF)</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Upload ảnh hoặc PDF chứng chỉ. Có thể ẩn khỏi public ở trang Settings.
+        </p>
         <CloudinaryUploader
           multiple={false}
           folder="knowledge/certificate"
@@ -125,6 +159,9 @@ export function KnowledgeForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Ảnh minh họa</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Sơ đồ, screenshot, mindmap — hiển thị trong bài viết.
+        </p>
         <CloudinaryUploader
           folder="knowledge/images"
           value={images}
@@ -134,9 +171,12 @@ export function KnowledgeForm({ initial }: Props) {
 
       <Card className="flex flex-col gap-3">
         <CardTitle>Nội dung</CardTitle>
+        <p className="text-sm text-[var(--color-muted-foreground)]">
+          Ghi chú chi tiết: định nghĩa, cách dùng, code mẫu, lưu ý. Hỗ trợ heading, list, code block, embed.
+        </p>
         <TiptapEditor
           folder="knowledge/content"
-          placeholder="Ghi chú kiến thức đã học…"
+          placeholder="Ghi lại kiến thức đã học: khái niệm chính, ví dụ, lưu ý..."
           value={content as never}
           onChange={(json, html) => {
             setValue('content', json as Record<string, unknown>, { shouldDirty: true });
@@ -146,7 +186,12 @@ export function KnowledgeForm({ initial }: Props) {
       </Card>
 
       <Card className="flex items-center justify-between">
-        <CardTitle>Published</CardTitle>
+        <div>
+          <CardTitle>Published</CardTitle>
+          <p className="text-sm text-[var(--color-muted-foreground)]">
+            Khi bật, kiến thức hiển thị public tại <code>/u/username/knowledge/slug</code>.
+          </p>
+        </div>
         <Switch checked={!!isPublished} onChange={(v) => setValue('isPublished', v, { shouldDirty: true })} />
       </Card>
 
