@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  selfOS app icon v3 — chibi penguin phẳng, dễ thương, trên squircle gradient brand.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="selfOS app icon">
+  <title>selfOS app icon</title>
+
+  <defs>
+    <linearGradient id="appBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#6366F1"/>
+      <stop offset="55%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#0891B2"/>
+    </linearGradient>
+    <linearGradient id="appGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle background -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#appBg)"/>
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#appGlow)"/>
+
+  <!-- Shadow + feet -->
+  <ellipse cx="256" cy="476" rx="130" ry="10" fill="#000000" opacity="0.25"/>
+  <g>
+    <ellipse cx="208" cy="462" rx="42" ry="14" fill="#F59E0B" transform="rotate(-8 208 462)"/>
+    <ellipse cx="304" cy="462" rx="42" ry="14" fill="#F59E0B" transform="rotate(8 304 462)"/>
+    <g stroke="#B45309" stroke-width="2.2" stroke-linecap="round" fill="none">
+      <path d="M188 459 L196 468 M208 456 L208 470 M228 459 L220 468" transform="rotate(-8 208 462)"/>
+      <path d="M284 459 L292 468 M304 456 L304 470 M324 459 L316 468" transform="rotate(8 304 462)"/>
+    </g>
+  </g>
+
+  <!-- Flippers -->
+  <g fill="#111827">
+    <path d="M132 274 Q92 310 108 388 Q130 412 150 388 Q152 348 156 300 Z"/>
+    <path d="M380 274 Q420 310 404 388 Q382 412 362 388 Q360 348 356 300 Z"/>
+  </g>
+
+  <!-- Body + head -->
+  <ellipse cx="256" cy="340" rx="160" ry="150" fill="#111827"/>
+  <circle cx="256" cy="200" r="120" fill="#111827"/>
+  <ellipse cx="200" cy="150" rx="46" ry="30" fill="#FFFFFF" opacity="0.08"/>
+
+  <!-- Belly -->
+  <ellipse cx="256" cy="330" rx="118" ry="152" fill="#F8FAFC"/>
+
+  <!-- Face -->
+  <ellipse cx="178" cy="220" rx="20" ry="10" fill="#FDA4AF" opacity="0.6"/>
+  <ellipse cx="334" cy="220" rx="20" ry="10" fill="#FDA4AF" opacity="0.6"/>
+
+  <g>
+    <circle cx="212" cy="195" r="16" fill="#F8FAFC"/>
+    <circle cx="300" cy="195" r="16" fill="#F8FAFC"/>
+    <circle cx="214" cy="198" r="9" fill="#111827"/>
+    <circle cx="302" cy="198" r="9" fill="#111827"/>
+    <circle cx="217" cy="194" r="3" fill="#FFFFFF"/>
+    <circle cx="305" cy="194" r="3" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Beak -->
+  <g>
+    <path d="M234 232 L278 232 L256 268 Z" fill="#F59E0B"/>
+    <path d="M234 232 L278 232 L256 250 Z" fill="#FBBF24"/>
+    <path d="M234 232 L278 232" stroke="#B45309" stroke-width="1.5"/>
+    <path d="M248 258 L264 258 L256 268 Z" fill="#92400E" opacity="0.6"/>
+  </g>
+
+  <!-- Scarf -->
+  <g>
+    <path d="M150 290 Q256 322 362 290 L358 318 Q256 348 154 318 Z" fill="#0891B2"/>
+    <path d="M150 290 Q256 322 362 290 L360 300 Q256 328 152 300 Z" fill="#22D3EE"/>
+    <circle cx="256" cy="326" r="12" fill="#0E7490"/>
+    <circle cx="256" cy="326" r="5" fill="#F8FAFC" opacity="0.9"/>
+    <g fill="#F8FAFC" opacity="0.9">
+      <circle cx="196" cy="308" r="2.5"/>
+      <circle cx="208" cy="310" r="2.5"/>
+      <circle cx="220" cy="308" r="2.5"/>
+      <circle cx="292" cy="308" r="2.5"/>
+      <circle cx="304" cy="310" r="2.5"/>
+      <circle cx="316" cy="308" r="2.5"/>
+    </g>
+  </g>
+</svg>

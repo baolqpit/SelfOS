@@ -34,7 +34,15 @@ export default async function LandingPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
-        <section className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 pt-24 pb-16 text-center">
+        <section className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 pt-20 pb-16 text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/penguin-mark.svg"
+            alt=""
+            width={140}
+            height={140}
+            className="h-32 w-32 drop-shadow-[0_12px_32px_rgba(99,102,241,0.35)] md:h-36 md:w-36"
+          />
           <span className="chip chip-accent">v0.1 · Portfolio-as-a-service</span>
           <h1 className="text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
             Trang cá nhân của bạn,

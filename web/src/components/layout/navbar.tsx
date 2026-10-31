@@ -8,9 +8,14 @@ export async function Navbar() {
     <header className="sticky top-0 z-30 h-14 border-b border-[var(--color-border)]/60 bg-[var(--color-background)]/70 backdrop-blur-xl">
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] text-xs font-black text-white shadow-[var(--shadow-sm)]">
-            s
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/penguin-mark.svg"
+            alt="selfOS"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+          />
           <span className="text-base font-bold tracking-tight">
             self<span className="text-gradient">OS</span>
           </span>

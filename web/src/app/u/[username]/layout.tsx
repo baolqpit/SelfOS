@@ -29,7 +29,7 @@ export default async function PublicUserLayout({
       <PublicUserNav
         username={username}
         fullName={profile?.fullName ?? username}
-        avatarUrl={profile?.avatarUrl}
+        avatarUrl={profile?.avatarUrl ?? undefined}
         modulesVisibility={settings.modulesVisibility}
       />
       <main className="mx-auto w-full max-w-5xl px-4 pb-16 pt-6">{children}</main>

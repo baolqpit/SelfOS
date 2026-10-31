@@ -1,0 +1,23 @@
+{
+  "name": "selfOS",
+  "short_name": "selfOS",
+  "description": "Personal portfolio OS — profile, projects, daily, knowledge.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090f",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/penguin-app.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
