@@ -72,10 +72,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (token.userId) {
         session.user = {
+          ...session.user,
           id: token.userId,
           email: token.email ?? '',
           username: token.username ?? '',
-        };
+        } as typeof session.user;
       }
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
