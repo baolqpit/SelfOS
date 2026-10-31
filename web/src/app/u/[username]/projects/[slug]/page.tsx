@@ -54,63 +54,70 @@ export default async function PublicProjectDetailPage({
   const { project, settings } = data;
   const vis = settings.modulesVisibility.projects;
 
+  const metaRows: { label: string; value: React.ReactNode }[] = [];
+  if (project.startDate) {
+    metaRows.push({
+      label: 'Thời gian',
+      value: `${formatDate(project.startDate)} → ${formatDate(project.endDate) || 'present'}`,
+    });
+  }
+  if (project.teamSize) metaRows.push({ label: 'Team size', value: `${project.teamSize} người` });
+  if (project.role) metaRows.push({ label: 'Vai trò', value: project.role });
+  if (vis?.showClient && project.client) metaRows.push({ label: 'Khách hàng', value: project.client });
+  if (vis?.showRevenue && project.revenueAmount != null) {
+    metaRows.push({
+      label: 'Doanh thu',
+      value: formatCurrency(project.revenueAmount, project.revenueCurrency ?? 'VND'),
+    });
+  }
+
   return (
-    <article className="flex flex-col gap-6">
+    <article className="flex flex-col gap-10">
       {project.coverUrl && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-3xl border border-[var(--color-border)] shadow-[var(--shadow-lg)]">
           <CloudinaryImage src={project.coverUrl} alt={project.name} priority className="h-full w-full object-cover" />
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[var(--color-background)]/80 to-transparent" />
         </div>
       )}
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold">{project.name}</h1>
-        {project.summary && <p className="text-base text-[var(--color-muted-foreground)]">{project.summary}</p>}
-        <div className="flex flex-wrap gap-1 pt-2">
+      <header className="flex flex-col gap-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+          Project
+        </p>
+        <h1 className="text-4xl font-black leading-tight tracking-tight md:text-5xl">
+          {project.name}
+        </h1>
+        {project.summary && (
+          <p className="max-w-3xl text-lg text-[var(--color-muted-foreground)]">
+            {project.summary}
+          </p>
+        )}
+        <div className="flex flex-wrap gap-1.5 pt-2">
           {(project.technologies ?? []).map((t) => (
             <Badge key={t}>{t}</Badge>
           ))}
         </div>
       </header>
 
-      <dl className="grid gap-x-6 gap-y-2 text-sm md:grid-cols-2">
-        {project.startDate && (
-          <div>
-            <dt className="text-[var(--color-muted-foreground)]">Thời gian</dt>
-            <dd>
-              {formatDate(project.startDate)} → {formatDate(project.endDate) || 'present'}
-            </dd>
-          </div>
-        )}
-        {project.teamSize && (
-          <div>
-            <dt className="text-[var(--color-muted-foreground)]">Team size</dt>
-            <dd>{project.teamSize} người</dd>
-          </div>
-        )}
-        {project.role && (
-          <div>
-            <dt className="text-[var(--color-muted-foreground)]">Vai trò</dt>
-            <dd>{project.role}</dd>
-          </div>
-        )}
-        {vis?.showClient && project.client && (
-          <div>
-            <dt className="text-[var(--color-muted-foreground)]">Khách hàng</dt>
-            <dd>{project.client}</dd>
-          </div>
-        )}
-        {vis?.showRevenue && project.revenueAmount != null && (
-          <div>
-            <dt className="text-[var(--color-muted-foreground)]">Doanh thu</dt>
-            <dd>{formatCurrency(project.revenueAmount, project.revenueCurrency ?? 'VND')}</dd>
-          </div>
-        )}
-        {project.results && (
-          <div className="md:col-span-2">
-            <dt className="text-[var(--color-muted-foreground)]">Kết quả</dt>
-            <dd>{project.results}</dd>
-          </div>
-        )}
-      </dl>
+      {metaRows.length > 0 && (
+        <dl className="grid gap-x-10 gap-y-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-6 text-sm md:grid-cols-3">
+          {metaRows.map((r) => (
+            <div key={r.label} className="flex flex-col gap-1">
+              <dt className="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
+                {r.label}
+              </dt>
+              <dd className="text-base font-medium">{r.value}</dd>
+            </div>
+          ))}
+          {project.results && (
+            <div className="md:col-span-3">
+              <dt className="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
+                Kết quả
+              </dt>
+              <dd className="mt-1 text-base">{project.results}</dd>
+            </div>
+          )}
+        </dl>
+      )}
 
       <section>
         <TiptapRenderer value={project.content as never} html={project.contentHtml} />
@@ -118,13 +125,13 @@ export default async function PublicProjectDetailPage({
 
       {(project.gallery?.length ?? 0) > 0 && (
         <section>
-          <h2 className="mb-2 text-xl font-semibold">Thư viện</h2>
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+          <h2 className="mb-3 text-xl font-bold tracking-tight">Thư viện</h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
             {project.gallery!.map((m, i) =>
               m.type === 'video' ? (
-                <video key={i} src={m.url} controls className="aspect-video rounded-lg object-cover" />
+                <video key={i} src={m.url} controls className="aspect-video rounded-xl object-cover" />
               ) : (
-                <div key={i} className="relative aspect-square overflow-hidden rounded-lg">
+                <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
                   <CloudinaryImage src={m.url} alt={m.alt ?? ''} className="h-full w-full object-cover" />
                 </div>
               ),

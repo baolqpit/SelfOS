@@ -1,10 +1,38 @@
+import { notFound } from 'next/navigation';
 import { Navbar } from '@/components/layout/navbar';
+import { PublicUserNav } from '@/components/layout/public-user-nav';
+import { fetchUserBundle, buildThemeStyle, themeAttr } from '@/lib/user-settings';
 
-export default function PublicUserLayout({ children }: { children: React.ReactNode }) {
+export const revalidate = 60;
+
+export default async function PublicUserLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  const bundle = await fetchUserBundle(username);
+  if (!bundle) notFound();
+  const { settings, profile } = bundle;
+  const style = buildThemeStyle(settings);
+  const theme = themeAttr(settings);
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div
+      className="flex min-h-screen flex-col bg-aurora"
+      style={style}
+      data-theme={theme}
+    >
       <Navbar />
-      <main className="mx-auto w-full max-w-5xl px-4 py-6">{children}</main>
+      <PublicUserNav
+        username={username}
+        fullName={profile?.fullName ?? username}
+        avatarUrl={profile?.avatarUrl}
+        modulesVisibility={settings.modulesVisibility}
+      />
+      <main className="mx-auto w-full max-w-5xl px-4 pb-16 pt-6">{children}</main>
     </div>
   );
 }
